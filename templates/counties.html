@@ -1,0 +1,50 @@
+<a href="/">Return to States</a>
+<div class="info county f32">
+    <table border="0">
+      <tr>
+        <td>
+          county
+        </td>
+        <td>
+            {{ geojson.selected.properties.NAME || ''}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          2010 Population
+        </td>
+        <td>
+          {{ popData[geojson.selected.properties.GEO_ID].pop2010 || ''}}
+
+        </td>
+      </tr>
+      <tr>
+        <td>
+          2011 Population
+        </td>
+        <td>
+          {{ popData[geojson.selected.properties.GEO_ID].pop2011 || ''}}
+
+        </td>
+      </tr>
+      <tr>
+        <td>
+          2012 Population
+        </td>
+        <td>
+          {{ popData[geojson.selected.properties.GEO_ID].pop2012 || ''}}
+
+        </td>
+      </tr>
+      <tr>
+        <td>
+          2013 Population
+        </td>
+        <td>
+          {{ popData[geojson.selected.properties.GEO_ID].pop2013 || ''}}
+
+        </td>
+      </tr>
+    </table>
+</div>
+<leaflet center="center" events="events" geojson="geojson" bounds="bounds"></leaflet>

@@ -1,0 +1,22 @@
+<div class="info country f32">
+    <table border="0">
+      <tr>
+        <td>
+          State
+        </td>
+        <td>
+            {{ geojson.selected.properties.name || ''}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Density
+        </td>
+        <td>
+          {{ geojson.selected.properties.density || ''}}
+        </td>
+      </tr>
+    </table>
+</div>
+<div class="info box">Map center: [ lat: {{ center.lat | number:4 }}, lng: {{ center.lng | number:4 }} ]</div>
+<leaflet center="center" events="events" geojson="geojson"></leaflet>
