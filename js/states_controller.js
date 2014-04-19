@@ -92,7 +92,7 @@
           zoom: 5
         }
       });
-      $http.get("/us_states.geo.json").success(function(data, status) {
+      $http.get("/data/us_states.geo.json").success(function(data, status) {
         return angular.extend($scope, {
           geojson: {
             data: data,

@@ -65,7 +65,7 @@
         zoom: 5
 
       # Get the countries geojson data from a JSON
-    $http.get("/us_states.geo.json").success (data, status) ->
+    $http.get("/data/us_states.geo.json").success (data, status) ->
 
       angular.extend $scope,
         geojson:
