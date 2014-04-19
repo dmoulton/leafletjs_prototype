@@ -5,7 +5,7 @@
   "$stateParams"
   ($scope, $http, $state, $stateParams) ->
     shapeClick = (area, event) ->
-      alert "The largest populated county has " + $scope.largestPop
+      alert "Nothing to see here"
       return
 
     # Get a country paint color from the continents array of colors
@@ -31,6 +31,7 @@
         else (if pct > 10 then "#FED976"
         else "#FFEDA0")))))))
       catch e
+        console.log("error getting colors")
         "grey"
 
     # Mouse over function, called from the Leaflet Map Events
@@ -53,7 +54,6 @@
       return
 
     angular.extend $scope,
-
       center:
         zoom: 2
 
@@ -77,23 +77,23 @@
               $scope.bounds.southWest.lat = x[1]
 
       $scope.popData = {}
-      if($stateParams.stateId == "utah")
-        $http.get("/"+$stateParams.stateId+"_census.json").success (data, status) ->
-          for county in data
-            $scope.popData[county['GEO.id']]={}
-            $scope.popData[county['GEO.id']]["pop2010"] = county.respop72010
-            $scope.popData[county['GEO.id']]["pop2011"] = county.respop72011
-            $scope.popData[county['GEO.id']]["pop2012"] = county.respop72012
-            $scope.popData[county['GEO.id']]["pop2013"] = county.respop72013
-            if parseInt(county.respop72013) > $scope.largestPop
-              $scope.largestPop = county.respop72013
+      $http.get("/census/"+$stateParams.stateId+"_census.json").success (data, status) ->
+        for county in data
+          $scope.popData[county['GEO.id']]={}
+          $scope.popData[county['GEO.id']]["pop2010"] = county.respop72010
+          $scope.popData[county['GEO.id']]["pop2011"] = county.respop72011
+          $scope.popData[county['GEO.id']]["pop2012"] = county.respop72012
+          $scope.popData[county['GEO.id']]["pop2013"] = county.respop72013
+          if parseInt(county.respop72013) > $scope.largestPop
+            $scope.largestPop = county.respop72013
 
-          angular.extend $scope,
-            geojson:
-              data: $scope.map_data
-              style: style
-              resetStyleOnMouseout: true
-      else
+        angular.extend $scope,
+          geojson:
+            data: $scope.map_data
+            style: style
+            resetStyleOnMouseout: true
+      .error (data,status) ->
+        console.log("error loading census")
         angular.extend $scope,
           geojson:
             data: $scope.map_data

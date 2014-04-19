@@ -5,7 +5,7 @@
       var getColor, shapeClick, shapeMouseover, style;
 
       shapeClick = function(area, event) {
-        alert("The largest populated county has " + $scope.largestPop);
+        alert("Nothing to see here");
       };
       style = function(feature) {
         return {
@@ -54,6 +54,7 @@
           }
         } catch (_error) {
           e = _error;
+          console.log("error getting colors");
           return "grey";
         }
       };
@@ -112,30 +113,20 @@
           }
         }
         $scope.popData = {};
-        if ($stateParams.stateId === "utah") {
-          return $http.get("/" + $stateParams.stateId + "_census.json").success(function(data, status) {
-            var county, _l, _len3;
+        return $http.get("/census/" + $stateParams.stateId + "_census.json").success(function(data, status) {
+          var county, _l, _len3;
 
-            for (_l = 0, _len3 = data.length; _l < _len3; _l++) {
-              county = data[_l];
-              $scope.popData[county['GEO.id']] = {};
-              $scope.popData[county['GEO.id']]["pop2010"] = county.respop72010;
-              $scope.popData[county['GEO.id']]["pop2011"] = county.respop72011;
-              $scope.popData[county['GEO.id']]["pop2012"] = county.respop72012;
-              $scope.popData[county['GEO.id']]["pop2013"] = county.respop72013;
-              if (parseInt(county.respop72013) > $scope.largestPop) {
-                $scope.largestPop = county.respop72013;
-              }
+          for (_l = 0, _len3 = data.length; _l < _len3; _l++) {
+            county = data[_l];
+            $scope.popData[county['GEO.id']] = {};
+            $scope.popData[county['GEO.id']]["pop2010"] = county.respop72010;
+            $scope.popData[county['GEO.id']]["pop2011"] = county.respop72011;
+            $scope.popData[county['GEO.id']]["pop2012"] = county.respop72012;
+            $scope.popData[county['GEO.id']]["pop2013"] = county.respop72013;
+            if (parseInt(county.respop72013) > $scope.largestPop) {
+              $scope.largestPop = county.respop72013;
             }
-            return angular.extend($scope, {
-              geojson: {
-                data: $scope.map_data,
-                style: style,
-                resetStyleOnMouseout: true
-              }
-            });
-          });
-        } else {
+          }
           return angular.extend($scope, {
             geojson: {
               data: $scope.map_data,
@@ -143,7 +134,16 @@
               resetStyleOnMouseout: true
             }
           });
-        }
+        }).error(function(data, status) {
+          console.log("error loading census");
+          return angular.extend($scope, {
+            geojson: {
+              data: $scope.map_data,
+              style: style,
+              resetStyleOnMouseout: true
+            }
+          });
+        });
       });
     }
   ]);
