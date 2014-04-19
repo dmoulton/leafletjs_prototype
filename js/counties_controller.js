@@ -5,7 +5,7 @@
       var getColor, shapeClick, shapeMouseover, style;
 
       shapeClick = function(area, event) {
-        alert("Nothing to see here");
+        alert("" + area.properties.NAME + " " + area.properties.LSAD + " contains " + (((parseInt(area.properties.populations.respop72013) / $scope.totalPop) * 100).toFixed(2)) + "% of the population of " + area.properties.STATE_NAME);
       };
       style = function(feature) {
         return {
@@ -21,30 +21,38 @@
         var e, pct, pop;
 
         try {
-          pop = $scope.popData[f.properties.GEO_ID].pop2013;
+          pop = f.properties.populations.respop72013;
           pct = (parseInt(pop) / $scope.largestPop) * 100;
           if (pct > 90) {
             return "#800026";
           } else {
             if (pct > 80) {
-              return "#BD0026";
+              return "#8D193C";
             } else {
-              if (pct > 60) {
-                return "#E31A1C";
+              if (pct > 70) {
+                return "#993351";
               } else {
-                if (pct > 40) {
-                  return "#FC4E2A";
+                if (pct > 60) {
+                  return "#A64D67";
                 } else {
-                  if (pct > 20) {
-                    return "#FD8D3C";
+                  if (pct > 50) {
+                    return "#B3667D";
                   } else {
-                    if (pct > 20) {
-                      return "#FEB24C";
+                    if (pct > 40) {
+                      return "#C08092";
                     } else {
-                      if (pct > 10) {
-                        return "#FED976";
+                      if (pct > 30) {
+                        return "#CC99A8";
                       } else {
-                        return "#FFEDA0";
+                        if (pct > 20) {
+                          return "#D9B2BE";
+                        } else {
+                          if (pct > 10) {
+                            return "#E6CCD4";
+                          } else {
+                            return "#F2E6E9";
+                          }
+                        }
                       }
                     }
                   }
@@ -54,7 +62,6 @@
           }
         } catch (_error) {
           e = _error;
-          console.log("error getting colors");
           return "grey";
         }
       };
@@ -89,9 +96,14 @@
         $scope.bounds.southWest.lat = 90;
         $scope.bounds.southWest.lng = 180;
         $scope.largestPop = 0;
+        $scope.totalPop = 0;
         _ref = data.features;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           f = _ref[_i];
+          if (parseInt(f.properties.populations.respop72013) > $scope.largestPop) {
+            $scope.largestPop = f.properties.populations.respop72013;
+          }
+          $scope.totalPop += parseInt(f.properties.populations.respop72013);
           _ref1 = f.geometry.coordinates;
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
             c = _ref1[_j];
@@ -112,37 +124,13 @@
             }
           }
         }
-        $scope.popData = {};
-        return $http.get("/census/" + $stateParams.stateId + "_census.json").success(function(data, status) {
-          var county, _l, _len3;
-
-          for (_l = 0, _len3 = data.length; _l < _len3; _l++) {
-            county = data[_l];
-            $scope.popData[county['GEO.id']] = {};
-            $scope.popData[county['GEO.id']]["pop2010"] = county.respop72010;
-            $scope.popData[county['GEO.id']]["pop2011"] = county.respop72011;
-            $scope.popData[county['GEO.id']]["pop2012"] = county.respop72012;
-            $scope.popData[county['GEO.id']]["pop2013"] = county.respop72013;
-            if (parseInt(county.respop72013) > $scope.largestPop) {
-              $scope.largestPop = county.respop72013;
-            }
+        console.log("error loading census");
+        return angular.extend($scope, {
+          geojson: {
+            data: $scope.map_data,
+            style: style,
+            resetStyleOnMouseout: true
           }
-          return angular.extend($scope, {
-            geojson: {
-              data: $scope.map_data,
-              style: style,
-              resetStyleOnMouseout: true
-            }
-          });
-        }).error(function(data, status) {
-          console.log("error loading census");
-          return angular.extend($scope, {
-            geojson: {
-              data: $scope.map_data,
-              style: style,
-              resetStyleOnMouseout: true
-            }
-          });
         });
       });
     }

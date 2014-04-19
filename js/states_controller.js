@@ -34,24 +34,24 @@
           return "#800026";
         } else {
           if (d > 500) {
-            return "#BD0026";
+            return "#8D193C";
           } else {
             if (d > 200) {
-              return "#E31A1C";
+              return "#993351";
             } else {
               if (d > 100) {
-                return "#FC4E2A";
+                return "#A64D67";
               } else {
                 if (d > 50) {
-                  return "#FD8D3C";
+                  return "#B3667D";
                 } else {
                   if (d > 20) {
-                    return "#FEB24C";
+                    return "#C08092";
                   } else {
                     if (d > 10) {
-                      return "#FED976";
+                      return "#CC99A8";
                     } else {
-                      return "#FFEDA0";
+                      return "#D9B2BE";
                     }
                   }
                 }

@@ -5,10 +5,8 @@
   "$stateParams"
   ($scope, $http, $state, $stateParams) ->
     shapeClick = (area, event) ->
-      alert "Nothing to see here"
+      alert "#{area.properties.NAME} #{area.properties.LSAD} contains #{((parseInt(area.properties.populations.respop72013)/$scope.totalPop)*100).toFixed(2)}% of the population of #{area.properties.STATE_NAME}"
       return
-
-    # Get a country paint color from the continents array of colors
 
     style = (feature) ->
       fillColor: getColor(feature)
@@ -20,18 +18,20 @@
 
     getColor = (f) ->
       try
-        pop = $scope.popData[f.properties.GEO_ID].pop2013
+        pop = f.properties.populations.respop72013
         pct = (parseInt(pop)/$scope.largestPop) * 100
         (if pct > 90 then "#800026"
-        else (if pct > 80 then "#BD0026"
-        else (if pct > 60 then "#E31A1C"
-        else (if pct > 40 then "#FC4E2A"
-        else (if pct > 20 then "#FD8D3C"
-        else (if pct > 20 then "#FEB24C"
-        else (if pct > 10 then "#FED976"
-        else "#FFEDA0")))))))
+        else (if pct > 80 then "#8D193C"
+        else (if pct > 70 then "#993351"
+        else (if pct > 60 then "#A64D67"
+        else (if pct > 50 then "#B3667D"
+        else (if pct > 40 then "#C08092"
+        else (if pct > 30 then "#CC99A8"
+        else (if pct > 20 then "#D9B2BE"
+        else (if pct > 10 then "#E6CCD4"
+        else "#F2E6E9")))))))))
       catch e
-        console.log("error getting colors")
+        #console.log("error getting colors")
         "grey"
 
     # Mouse over function, called from the Leaflet Map Events
@@ -64,7 +64,12 @@
       $scope.bounds.southWest.lat = 90
       $scope.bounds.southWest.lng = 180
       $scope.largestPop = 0
+      $scope.totalPop = 0
       for f in data.features
+        if parseInt(f.properties.populations.respop72013) > $scope.largestPop
+          $scope.largestPop = f.properties.populations.respop72013
+        $scope.totalPop += parseInt(f.properties.populations.respop72013)
+
         for c in f.geometry.coordinates
           for x in c
             if x[0] > $scope.bounds.northEast.lng
@@ -76,29 +81,12 @@
             if x[1] < $scope.bounds.southWest.lat
               $scope.bounds.southWest.lat = x[1]
 
-      $scope.popData = {}
-      $http.get("/census/"+$stateParams.stateId+"_census.json").success (data, status) ->
-        for county in data
-          $scope.popData[county['GEO.id']]={}
-          $scope.popData[county['GEO.id']]["pop2010"] = county.respop72010
-          $scope.popData[county['GEO.id']]["pop2011"] = county.respop72011
-          $scope.popData[county['GEO.id']]["pop2012"] = county.respop72012
-          $scope.popData[county['GEO.id']]["pop2013"] = county.respop72013
-          if parseInt(county.respop72013) > $scope.largestPop
-            $scope.largestPop = county.respop72013
-
-        angular.extend $scope,
-          geojson:
-            data: $scope.map_data
-            style: style
-            resetStyleOnMouseout: true
-      .error (data,status) ->
-        console.log("error loading census")
-        angular.extend $scope,
-          geojson:
-            data: $scope.map_data
-            style: style
-            resetStyleOnMouseout: true
+      console.log("error loading census")
+      angular.extend $scope,
+        geojson:
+          data: $scope.map_data
+          style: style
+          resetStyleOnMouseout: true
 
     return
 

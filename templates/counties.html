@@ -1,4 +1,6 @@
 <a href="/">Return to States</a>
+
+<leaflet center="center" events="events" geojson="geojson" bounds="bounds"></leaflet>
 <div class="info county f32">
     <table border="0">
       <tr>
@@ -14,7 +16,7 @@
           2010 Population
         </td>
         <td>
-          {{ popData[geojson.selected.properties.GEO_ID].pop2010 || ''}}
+          {{ geojson.selected.properties.populations.respop72010 || ''}}
 
         </td>
       </tr>
@@ -23,7 +25,7 @@
           2011 Population
         </td>
         <td>
-          {{ popData[geojson.selected.properties.GEO_ID].pop2011 || ''}}
+          {{ geojson.selected.properties.populations.respop72011 || ''}}
 
         </td>
       </tr>
@@ -32,7 +34,7 @@
           2012 Population
         </td>
         <td>
-          {{ popData[geojson.selected.properties.GEO_ID].pop2012 || ''}}
+          {{ geojson.selected.properties.populations.respop72012 || ''}}
 
         </td>
       </tr>
@@ -41,10 +43,9 @@
           2013 Population
         </td>
         <td>
-          {{ popData[geojson.selected.properties.GEO_ID].pop2013 || ''}}
+          {{ geojson.selected.properties.populations.respop72013 || ''}}
 
         </td>
       </tr>
     </table>
 </div>
-<leaflet center="center" events="events" geojson="geojson" bounds="bounds"></leaflet>

@@ -23,13 +23,13 @@
 
     getColor = (d) ->
       (if d > 1000 then "#800026"
-      else (if d > 500 then "#BD0026"
-      else (if d > 200 then "#E31A1C"
-      else (if d > 100 then "#FC4E2A"
-      else (if d > 50 then "#FD8D3C"
-      else (if d > 20 then "#FEB24C"
-      else (if d > 10 then "#FED976"
-      else "#FFEDA0")))))))
+      else (if d > 500 then "#8D193C"
+      else (if d > 200 then "#993351"
+      else (if d > 100 then "#A64D67"
+      else (if d > 50 then "#B3667D"
+      else (if d > 20 then "#C08092"
+      else (if d > 10 then "#CC99A8"
+      else "#D9B2BE")))))))
 
     # Mouse over function, called from the Leaflet Map Events
     shapeMouseover = (leafletEvent) ->
